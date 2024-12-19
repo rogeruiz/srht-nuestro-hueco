@@ -16,10 +16,6 @@
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Tenemos que obtener los variables
-source ./variables.sh
+source ../variables.sh
 
-az network public-ip show \
-  --resource-group "${NOMBRE}-rg" \
-  --name "${NOMBRE}-ip" \
-  --query '[ipAddress,publicIpAllocationMethod,sku]' \
-  --output table
+az group delete --name "${NOMBRE}-rg" --yes

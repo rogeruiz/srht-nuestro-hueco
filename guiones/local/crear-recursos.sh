@@ -15,14 +15,21 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
-# El nombre de los recursos que vamos crear para usar Pi-Hole, PiVPN, y
-# WireGuard. En español lo vamos a llamar [p]rotector de [c]ables usando
-# [a]gujero [p]i. Esto lo puedos cambiar a cualquer nombre que queras.
-export NOMBRE='pcap'
+# Tenemos que obtener los variables
+source ../variables.sh
 
-# La ubicación pa' los recuros que vamos a crear
-export UBICACION='northcentralus'
+# Crear los gropos de recurso
+az group create --name ${NOMBRE}-rg --location ${UBICACION}
 
-# La dirección de IP pa' la caja de Linux
-export DIRECCION_IP_PUBLICO='127.0.0.1'
-export PORTO_PARA_EL_VPN='5342'
+# Crear una macquina virtual
+az vm create \
+  --resource-group ${NOMBRE}-rg \
+  --name ${NOMBRE}-vm \
+  --image Ubuntu2404 \
+  --admin-username ubuntu \
+  --public-ip-address ${NOMBRE}-ip \
+  --public-ip-address-allocation static \
+  --generate-ssh-keys
+
+# El porto abierto (Escoje algo random major de 1024 pa' que se use con WireGuard más tarde)
+az vm open-port --port 4400 --resource-group ${NOMBRE}-rg --name ${NOMBRE}-vm

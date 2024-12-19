@@ -15,21 +15,22 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
-# Tenemos que obtener los variables
-source ./variables.sh
+source ../variables.sh
 
-# Crear los gropos de recurso
-az group create --name ${NOMBRE}-rg --location ${UBICACION}
+# NOTE: Estos comandos se corrén en el caja de Linux pa' instalar a WireGuard.
+# No los corras en tu computadora.
 
-# Crear una macquina virtual
-az vm create \
-  --resource-group ${NOMBRE}-rg \
-  --name ${NOMBRE}-vm \
-  --image UbuntuLTS \
-  --admin-username ubuntu \
-  --public-ip-address ${NOMBRE}-ip \
-  --public-ip-address-allocation static \
-  --generate-ssh-keys
+# Agregamos unas llaves se SSH
+ssh -i ~/.ssh/id_rsa ubuntu@${DIRECCION_IP_PUBLICO}
 
-# El porto abierto (Escoje algo random major de 1024 pa' que se use con WireGuard más tarde)
-az vm open-port --port 4400 --resource-group ${NOMBRE}-rg --name ${NOMBRE}-vm
+# Actualizar, mejorar, y instalar UFW (Uncomplicated Firewall)
+sudo apt update && sudo apt upgrade && sudo apt install ufw
+
+# Usando UFW que acabamos a instalar, vamos a configurarlo con los sigiente
+# comandos
+sudo ufw allow 22
+sudo ufw allow "${PORTO_PARA_EL_VPN}"
+sudo ufw enable
+
+# Instalemos PiVPN
+curl -L https://install.pivpn.io | bash
