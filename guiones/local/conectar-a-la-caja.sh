@@ -18,8 +18,13 @@
 # Tenemos que obtener los variables
 source ../variables.sh
 
-az network public-ip show \
-  --resource-group "${NOMBRE}-rg" \
-  --name "${NOMBRE}-ip" \
-  --query '[ipAddress,publicIpAllocationMethod,sku]' \
-  --output table
+direccion=$(
+  az network public-ip show \
+    --resource-group "${NOMBRE}-rg" \
+    --name "${NOMBRE}-ip" \
+    --query '[ipAddress,publicIpAllocationMethod,sku]' \
+    --output JSON |
+    jq --raw-output '.[0]'
+)
+
+ssh "ubuntu@${direccion}"
