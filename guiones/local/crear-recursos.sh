@@ -31,5 +31,9 @@ az vm create \
   --public-ip-address-allocation static \
   --generate-ssh-keys
 
-# El porto abierto (Escoje algo random major de 1024 pa' que se use con WireGuard más tarde)
-az vm open-port --port 4400 --resource-group ${NOMBRE}-rg --name ${NOMBRE}-vm
+# El porto abierto (Escoje algo random major de 1024 pa' que se use con
+# WireGuard más tarde)
+az vm open-port \
+  --port ${PORTO_PARA_EL_VPN} \
+  --resource-group ${NOMBRE}-rg \
+  --name ${NOMBRE}-vm
