@@ -15,7 +15,7 @@ sourcehut y no en GitHub.
 
 ---
 
-# our hole (mirrored)
+# our-hole (mirrored)
 
 ```
 
